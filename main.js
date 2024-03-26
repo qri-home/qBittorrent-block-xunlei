@@ -3,30 +3,12 @@ const fsPromises = require("fs/promises")
 const fs = require("fs")
 const path = require("path")
 const qs = require("qs")
-// const winston = require("winston")
-// const format = winston.format
 
 let dateStr = new Date()
   .toLocaleString("zh-CN", { hour12: false })
   .replace(/[\/:]/g, "-")
 
-// const logFile = winston.createLogger({
-//   level: "info",
-//   format: format.combine(
-//     format.timestamp({
-//       format: "YYYY-MM-DD HH:mm:ss",
-//     }),
-//     format.splat(),
-//     format.simple()
-//   ),
-//   transports: [
-//     new winston.transports.File({
-//       filename: dateStr + ".log",
-//     }),
-//   ],
-// })
-
-console.log("log start", dateStr)
+console.log("log start", dateStr);
 
 const configPath = path.join(__dirname, "./config.json")
 const config = fs.readFileSync(configPath, {
@@ -81,6 +63,8 @@ let main = async () => {
     }),
   })
 
+  console.log("loginResStatus: " + loginRes.status)
+
   let cookieStr = loginRes.headers?.["set-cookie"]?.[0]
   let cookie = cookieStr.match(/(.*?);/)[1]
 
@@ -98,6 +82,7 @@ let main = async () => {
   })
 
   let torrents = allMission.data.torrents
+
   let torrentsArr = Object.keys(torrents)
   // logFile.info("torrents")
   // console.log(torrents)
@@ -116,12 +101,15 @@ let main = async () => {
         hash: torrentsArr[i],
       },
     })
+
     let peers = usersInOneM.data.peers
     let peersArr = Object.keys(peers)
+    console.log(`peers of ${torrents[torrentsArr[i]].name} : ${peersArr.length}`)
+
     for (let j = 0; j < peersArr.length; j++) {
       try {
         if (isBan(peers[peersArr[j]].client)) {
-          console.log("屏蔽 ", [peersArr[j], peers[peersArr[j]].client])
+          console.log("blocked ", [peersArr[j], peers[peersArr[j]].client])
           // logFile.info("屏蔽 ", [peersArr[j], peers[peersArr[j]].client])
           banCount++
           // maybe 404 , user has been baned
@@ -148,14 +136,12 @@ let main = async () => {
     }
   }
 
-  if (banCount === 0) {
-    // logFile.info("no peers to ban")
-    console.log("no peers to ban")
-  }
+  console.log(`banCount: ${banCount}`)
 
   // logFile.info("mission end")
 }
 
+main()
 
 setInterval(async () => {
   try {
