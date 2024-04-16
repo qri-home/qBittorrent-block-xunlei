@@ -4,6 +4,8 @@
 
 原理类似，为qBittorrent 设计 
 
+原理为通过webui的账号密码登录webui后对qBittorrent进行操作
+
 ## 其他可选项目
 
  - qBittorrent-Enhanced-Edition: https://github.com/c0re100/qBittorrent-Enhanced-Edition
