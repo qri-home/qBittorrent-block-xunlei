@@ -8,6 +8,7 @@
   "dependencies": {
     "axios": "^0.24.0",
     "qs": "^6.10.2",
-    "winston": "^3.3.3"
+    "winston": "^3.3.3",
+    "yarn": "^1.22.22"
   }
 }
