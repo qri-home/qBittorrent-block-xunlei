@@ -22,6 +22,7 @@ console.log("settings ", {
   password:
     configObj.password.slice(0, 1) + "***" + configObj.password.slice(4),
   root: configObj.root.slice(0, 1) + "***" + configObj.root.slice(4),
+  protocol: configObj.protocol
 })
 // logFile.info("log start")
 
@@ -42,15 +43,15 @@ let main = async () => {
 
   const commonHeader = {
     Host: configObj.root,
-    Origin: "http://" + configObj.root,
+    Origin: configObj.protocol + "://" + configObj.root,
     Pragma: "no-cache",
-    Referer: "http://" + configObj.root + "/",
+    Referer: configObj.protocol + "://" + configObj.root + "/",
     "Accept-Encoding": "gzip, deflate, br",
   }
 
   // login
   let loginRes = await axios.request({
-    url: "http://" + configObj.root + "/api/v2/auth/login",
+    url: configObj.protocol + "://" + configObj.root + "/api/v2/auth/login",
     method: "post",
     headers: {
       "Content-type": "application/x-www-form-urlencoded; charset=UTF-8",
@@ -72,7 +73,7 @@ let main = async () => {
 
   // get all mission info
   let allMission = await axios.request({
-    url: "http://" + configObj.root + "/api/v2/sync/maindata",
+    url: configObj.protocol + "://" + configObj.root + "/api/v2/sync/maindata",
     method: "get",
     headers: {
       Accept: "application/json",
@@ -90,7 +91,7 @@ let main = async () => {
   // get all user in each mission
   for (let i = 0; i < torrentsArr.length; i++) {
     let usersInOneM = await axios.request({
-      url: "http://" + configObj.root + "/api/v2/sync/torrentPeers",
+      url: configObj.protocol + "://" + configObj.root + "/api/v2/sync/torrentPeers",
       method: "get",
       headers: {
         Accept: "application/json",
@@ -114,7 +115,7 @@ let main = async () => {
           banCount++
           // maybe 404 , user has been baned
           let banUser = await axios.request({
-            url: "http://" + configObj.root + "/api/v2/transfer/banPeers",
+            url: configObj.protocol + "://" + configObj.root + "/api/v2/transfer/banPeers",
             method: "post",
             headers: {
               Accept: "application/json",
