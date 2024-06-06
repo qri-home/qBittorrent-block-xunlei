@@ -5,6 +5,9 @@
   "repository": "https://github.com/yukinotech/qBittorrent-block-xunlei",
   "author": "yukinotech <yukinotech@gmail.com>",
   "license": "MIT",
+  "scripts": {
+    "dcb": "docker build -t qbx-20240530-1"
+  },
   "dependencies": {
     "axios": "^0.24.0",
     "qs": "^6.10.2",
