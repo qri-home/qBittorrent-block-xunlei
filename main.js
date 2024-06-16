@@ -105,12 +105,15 @@ let main = async () => {
 
     let peers = usersInOneM.data.peers
     let peersArr = Object.keys(peers)
-    console.log(`peers of ${torrents[torrentsArr[i]].name} : ${peersArr.length}`)
+    if (peersArr.length > 0) {
+      console.log(`peers of ${torrents[torrentsArr[i]].name} : ${peersArr.length}`)
+    }
+    
 
     for (let j = 0; j < peersArr.length; j++) {
       try {
         if (isBan(peers[peersArr[j]].client)) {
-          console.log("blocked ", [peersArr[j], peers[peersArr[j]].client])
+          // console.log("blocked ", [peersArr[j], peers[peersArr[j]].client])
           // logFile.info("屏蔽 ", [peersArr[j], peers[peersArr[j]].client])
           banCount++
           // maybe 404 , user has been baned
