@@ -6,7 +6,8 @@
   "author": "yukinotech <yukinotech@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "dcb": "docker build -t qbx-20240530-1"
+    "dcb": "docker build -t qbx-20240617-1 .",
+    "dcs": "docker save -o ./dist/qbx-20240617-1.tar qbx-20240617-1"
   },
   "dependencies": {
     "axios": "^0.24.0",
