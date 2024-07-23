@@ -34,7 +34,7 @@ let isBan = (client) => {
 let main = async () => {
   // logFile.info("mission start")
   // number of peers be baned
-  let banCount = 0
+  let totalBanCount = 0
   const configPath = path.join(__dirname, "./config.json")
   const config = await fsPromises.readFile(configPath, {
     encoding: "utf-8",
@@ -64,7 +64,7 @@ let main = async () => {
     }),
   })
 
-  console.log("loginResStatus: " + loginRes.status)
+  // console.log("loginResStatus: " + loginRes.status)
 
   let cookieStr = loginRes.headers?.["set-cookie"]?.[0]
   let cookie = cookieStr.match(/(.*?);/)[1]
@@ -105,17 +105,15 @@ let main = async () => {
 
     let peers = usersInOneM.data.peers
     let peersArr = Object.keys(peers)
-    if (peersArr.length > 0) {
-      console.log(`peers of ${torrents[torrentsArr[i]].name} : ${peersArr.length}`)
-    }
     
-
+    let thisTorrentBanCount = 0;
     for (let j = 0; j < peersArr.length; j++) {
       try {
         if (isBan(peers[peersArr[j]].client)) {
           // console.log("blocked ", [peersArr[j], peers[peersArr[j]].client])
           // logFile.info("屏蔽 ", [peersArr[j], peers[peersArr[j]].client])
-          banCount++
+          totalBanCount++
+          thisTorrentBanCount++
           // maybe 404 , user has been baned
           let banUser = await axios.request({
             url: configObj.protocol + "://" + configObj.root + "/api/v2/transfer/banPeers",
@@ -138,9 +136,13 @@ let main = async () => {
         // logFile.info(e.toString())
       }
     }
+
+    if (thisTorrentBanCount > 0) {
+      console.log(`ban for torrent: ${torrents[torrentsArr[i]].name} : ${thisTorrentBanCount}`)
+    }
   }
-  if (banCount > 0) {
-    console.log(`banCount: ${banCount}`)
+  if (totalBanCount > 0) {
+    console.log(`totalBanCount: ${totalBanCount}`)
   }
 
   // logFile.info("mission end")
